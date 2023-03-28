@@ -1,12 +1,12 @@
-## 💬 Polygon-Generative-NFT(prototype)
+## 💬 Polygon-Mobile-dApp(prototype)
 
-本レポジトリは Polygon-Generative-NFT の完成版を示したものになります。
+本レポジトリは Polygon-Mobile-dApp の完成版を示したものになります。
 
-以下の手順を実行することで Polygon-Generative-NFT の挙動を確認できます。
+以下の手順を実行することで Polygon-Mobile-dApp の挙動を確認できます。
 
 ### レポジトリのクローン
 
-[こちら](https://github.com/unchain-tech/Polygon-Mobile-dApp.git)から Polygon-Generative-NFT をクローンします。
+[こちら](https://github.com/unchain-tech/Polygon-Mobile-dApp.git)から Polygon-Mobile-dApp をクローンします。
 
 その後下のコマンドを実行することで必要なパッケージをインストールしましょう。
 
@@ -44,7 +44,7 @@ yarn contract migrate:matic
 
 まずは`packages/client`に`smartcontract`というディレクトリを作成して、その中に先ほど migrate した際に得た`TodoContract.json`というファイルをコピーして貼り付けましょう。
 
-次に[こちら](https://app.unchain.tech/learn/Polygon-Generative-NFT/ja/3/2/)の section ３-lesson ２ を参考にしながら環境変数などを設定していきましょう。
+次に[こちら](https://app.unchain.tech/learn/Polygon-Mobile-dApp/ja/3/2/)の section ３-lesson ２ を参考にしながら環境変数などを設定していきましょう。
 
 全ての準備が整ったら、エミュレータや実機を接続していることを確認して下のコマンドを実行してフロントを立ち上げましょう。
 

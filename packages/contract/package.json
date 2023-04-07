@@ -6,8 +6,10 @@
   "scripts": {
     "compile": "truffle compile",
     "migrate": "truffle migrate",
-    "migrate:matic": "truffle migrate --network matic"
-    
+    "migrate:matic": "truffle migrate --network matic",
+    "test": "truffle test",
+    "solhint": "solhint --max-error 0 -c ./.solhint.json \"./contracts/*.sol\"",
+    "solhint:fix": "solhint --fix --max-error 0 -c ./.solhint.json \"./contract/**/*.sol\""
   },
   "devDependencies": {},
   "dependencies": {
@@ -15,6 +17,8 @@
     "dotenv": "^16.0.3",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
-    "chai-bignumber": "3.0.0"
+    "chai-bignumber": "3.0.0",
+    "solhint": "3.3.7",
+    "solidity-coverage": "^0.8.2"
   }
 }

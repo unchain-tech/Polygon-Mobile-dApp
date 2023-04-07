@@ -1,16 +1,14 @@
-const HDWalletProvider = require("@truffle/hdwallet-provider");
-require("dotenv").config();
-const fs = require("fs");
-const mnemonic = fs.readFileSync(".secret").toString().trim();
-
-const ALCHEMY_API_KEY = "YOU-ALCHEMY_API_KEY-FOR-POLYGON";
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+require('dotenv').config();
+const fs = require('fs');
+const mnemonic = fs.readFileSync('.secret').toString().trim();
 
 module.exports = {
   networks: {
     development: {
-      host: "localhost",
+      host: 'localhost',
       port: 7545,
-      network_id: "*",
+      network_id: '*',
     },
     matic: {
       provider: () =>
@@ -28,15 +26,15 @@ module.exports = {
       chainId: 80001,
     },
   },
-  contracts_directory: "./contracts",
+  contracts_directory: './contracts',
   compilers: {
     solc: {
-      version: "0.8.11",
+      version: '0.8.11',
       optimizer: {
         enabled: true,
         runs: 200,
       },
-    }
+    },
   },
   db: {
     enabled: false,

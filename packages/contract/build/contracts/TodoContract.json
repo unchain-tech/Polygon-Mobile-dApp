@@ -7196,9 +7196,7 @@
   "ast": {
     "absolutePath": "project:/contracts/TodoContract.sol",
     "exportedSymbols": {
-      "TodoContract": [
-        148
-      ]
+      "TodoContract": [148]
     },
     "id": 149,
     "license": "GPL-3.0",
@@ -7206,12 +7204,7 @@
     "nodes": [
       {
         "id": 1,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".9"
-        ],
+        "literals": ["solidity", "^", "0.8", ".9"],
         "nodeType": "PragmaDirective",
         "src": "36:23:0"
       },
@@ -7223,9 +7216,7 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 148,
-        "linearizedBaseContracts": [
-          148
-        ],
+        "linearizedBaseContracts": [148],
         "name": "TodoContract",
         "nameLocation": "70:12:0",
         "nodeType": "ContractDefinition",
@@ -7407,9 +7398,7 @@
                 "pathNode": {
                   "id": 13,
                   "name": "Task",
-                  "nameLocations": [
-                    "241:4:0"
-                  ],
+                  "nameLocations": ["241:4:0"],
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 11,
                   "src": "241:4:0"
@@ -7503,9 +7492,7 @@
               "src": "426:172:0",
               "statements": [
                 {
-                  "assignments": [
-                    31
-                  ],
+                  "assignments": [31],
                   "declarations": [
                     {
                       "constant": false,
@@ -7528,9 +7515,7 @@
                         "pathNode": {
                           "id": 29,
                           "name": "Task",
-                          "nameLocations": [
-                            "436:4:0"
-                          ],
+                          "nameLocations": ["436:4:0"],
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 11,
                           "src": "436:4:0"
@@ -7971,9 +7956,7 @@
               "src": "799:268:0",
               "statements": [
                 {
-                  "assignments": [
-                    66
-                  ],
+                  "assignments": [66],
                   "declarations": [
                     {
                       "constant": false,
@@ -7996,9 +7979,7 @@
                         "pathNode": {
                           "id": 64,
                           "name": "Task",
-                          "nameLocations": [
-                            "809:4:0"
-                          ],
+                          "nameLocations": ["809:4:0"],
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 11,
                           "src": "809:4:0"

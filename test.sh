@@ -1,6 +1,7 @@
 #!/bin/bash 
 
-cd packages/contract
+cd ./packages/contract
+touch .secret
 
 expect -c "
  spawn truffle develop

@@ -1,6 +1,7 @@
 #!/bin/bash 
 
-touch .secret_fake
+yarn install
+touch .secret
 
 expect -c "
  spawn truffle develop

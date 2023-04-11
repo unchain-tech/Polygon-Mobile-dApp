@@ -7,7 +7,7 @@
     "compile": "truffle compile",
     "migrate": "truffle migrate",
     "migrate:matic": "truffle migrate --network matic",
-    "test": "bash test.sh",
+    "test": "bash test/test.sh",
     "solhint": "solhint --max-error 0 -c ./.solhint.json \"./contracts/*.sol\"",
     "solhint:fix": "solhint --fix --max-error 0 -c ./.solhint.json \"./contract/**/*.sol\""
   },

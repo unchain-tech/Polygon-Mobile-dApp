@@ -1,6 +1,5 @@
 #!/bin/bash 
 
-yarn install
 touch .secret
 
 expect -c "

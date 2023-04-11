@@ -45,5 +45,7 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: install packages
+        run: yarn install
       - name: integration_test
         run: yarn workspace contract test

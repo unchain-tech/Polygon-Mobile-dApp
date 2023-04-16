@@ -38,7 +38,7 @@ jobs:
 
   contract-test:
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'skip ci') }}
+    if: contains(github.event.commits.*.message, '[skip ci]') == false
     needs: [setup, check]
     steps:
       - uses: actions/checkout@v3

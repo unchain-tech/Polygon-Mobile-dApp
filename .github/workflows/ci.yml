@@ -37,8 +37,8 @@ jobs:
         run: yarn prettier:check
 
   contract-test:
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'skip ci') }}
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'skip ci') }}
     needs: [setup, check]
     steps:
       - uses: actions/checkout@v3

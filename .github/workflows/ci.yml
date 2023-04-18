@@ -37,6 +37,7 @@ jobs:
         run: yarn prettier:check
 
   contract-test:
+    ${{ !contains(github.event.commits.*.message, '[skip ci]') }}
     runs-on: ubuntu-latest
     needs: [setup, check]
     steps:

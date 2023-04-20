@@ -45,5 +45,7 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: install expect-commend
+        run: apt-get install expect
       - name: integration_test
         run: yarn workspace contract test

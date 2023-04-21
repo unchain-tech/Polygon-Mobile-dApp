@@ -1,7 +1,16 @@
-**/yarn-error.log*
-
 # dependencies
 **/node_modules
 
+# build
+**/build
+
 # misc
 **/.DS_Store
+
+# secrets
+**/.secret
+**/.env
+
+# logs
+**/yarn-error.log*
+**/polygon-mobile-test.txt

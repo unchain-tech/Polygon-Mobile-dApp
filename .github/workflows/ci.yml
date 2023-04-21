@@ -48,11 +48,9 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-      - name: Move directory
-        run: cd packages/contract
       - name: Run truffle node
-        run: truffle develop &
+        run: cd packages/contract && truffle develop &
       - name: Test
-        run: truffle test
+        run: cd packages/contract && truffle test
       - name: Kill node
         run: kill $(lsof -t -i:9545)

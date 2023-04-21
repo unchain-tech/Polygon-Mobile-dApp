@@ -1,6 +1,5 @@
 #!/bin/bash 
 
-cd ./packages/contract
 touch .secret
 
 expect -c "

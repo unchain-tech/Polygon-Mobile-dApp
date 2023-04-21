@@ -51,6 +51,6 @@ jobs:
       - name: Run truffle node
         run: cd packages/contract && touch .secret && truffle develop &
       - name: Test
-        run: cd packages/contract && truffle test
+        run: truffle test
       - name: Kill node
         run: kill $(lsof -t -i:9545)

@@ -2,10 +2,17 @@
   "name": "polygon-mobile-dapp",
   "version": "1.0.0",
   "description": "\"template for monorepo project\"",
-  "main": "\"\"",
-  "author": "Tonny",
-  "license": "UNLICENSED",
   "private": true,
+  "scripts": {
+    "contract": "yarn workspace contract",
+    "client": "yarn workspace client",
+    "client:dev": "yarn workspace client dev",
+    "prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --ignore-path .prettierignore --write .",
+    "prettier:check": "prettier --ignore-unknown --no-error-on-unmatched-pattern --ignore-path .prettierignore --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "test": "yarn workspace contract test"
+  },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
@@ -31,15 +38,5 @@
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
-  },
-  "scripts": {
-    "contract": "yarn workspace contract",
-    "client": "yarn workspace client",
-    "client:dev": "yarn workspace client dev",
-    "prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --ignore-path .prettierignore --write .",
-    "prettier:check": "prettier --ignore-unknown --no-error-on-unmatched-pattern --ignore-path .prettierignore --check .",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
-    "test": "yarn workspace contract test"
   }
 }

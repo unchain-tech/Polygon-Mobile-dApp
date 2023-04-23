@@ -32,4 +32,18 @@ contract('Polygon-Mobile-dApp', () => {
       return ev.taskNumber.toNumber() === 0 && ev.task === 'make lunch';
     });
   });
+
+  // check update function
+  it('update function is working on chain', async () => {
+    // check if you can update tasks
+    const updateTX = await contract.updateTask(0, 'make dinner');
+    await contract.updateTask(1, 'clean up the rooms');
+    expect((await contract.readTask(0))[1]).to.equal('make dinner');
+    expect((await contract.readTask(1))[1]).to.equal('clean up the rooms');
+
+    // check if event "TaskUpdated" works
+    truffleAssert.eventEmitted(updateTX, 'TaskUpdated', (ev) => {
+      return ev.taskId.toNumber() === 0 && ev.task === 'make dinner';
+    });
+  });
 });

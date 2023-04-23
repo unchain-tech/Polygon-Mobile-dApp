@@ -15,7 +15,7 @@ contract('Polygon-Mobile-dApp', () => {
     contract = await TodoContract.new();
   });
 
-  // check create function
+  // check creating function
   it('create function is working on chain', async () => {
     // check if you can create multiple tasks
     const creationTX = await contract.createTask('make lunch');
@@ -33,7 +33,7 @@ contract('Polygon-Mobile-dApp', () => {
     });
   });
 
-  // check update function
+  // check updating function
   it('update function is working on chain', async () => {
     // check if you can update tasks
     const updateTX = await contract.updateTask(0, 'make dinner');
@@ -47,7 +47,7 @@ contract('Polygon-Mobile-dApp', () => {
     });
   });
 
-  // check toggle complete function
+  // check toggling function
   it('toggleComplete function is working on chain', async () => {
     // check if you can make a task completed
     const formerState = (await contract.readTask(0))[2];
@@ -64,7 +64,7 @@ contract('Polygon-Mobile-dApp', () => {
     });
   });
 
-  // check delete function
+  // check deleting function
   it('delete function is working on chain', async () => {
     // check if you can delete a task
     const deleteTX = await contract.deleteTask(0);

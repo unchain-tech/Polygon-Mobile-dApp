@@ -48,7 +48,7 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-      - name: Run truffle node
+      - name: Run truffle node and test
         run: cd packages/contract && touch .secret && truffle develop &
       - name: Test
         run: cd packages/contract && truffle test

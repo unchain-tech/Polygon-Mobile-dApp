@@ -46,4 +46,21 @@ contract('Polygon-Mobile-dApp', () => {
       return ev.taskId.toNumber() === 0 && ev.task === 'make dinner';
     });
   });
+
+  // check toggle complete function
+  it('toggleComplete function is working on chain', async () => {
+    // check if you can make a task completed
+    const formerState = (await contract.readTask(0))[2];
+    const toggleTX = await contract.toggleComplete(0);
+    expect((await contract.readTask(0))[2]).to.equal(!formerState);
+
+    // check if event "TaskIsCompleteToggled" works
+    truffleAssert.eventEmitted(toggleTX, 'TaskIsCompleteToggled', (ev) => {
+      return (
+        ev.taskId.toNumber() === 0 &&
+        ev.task === 'make dinner' &&
+        ev.isComplete === true
+      );
+    });
+  });
 });

@@ -63,4 +63,16 @@ contract('Polygon-Mobile-dApp', () => {
       );
     });
   });
+
+  // check delete function
+  it('delete function is working on chain', async () => {
+    // check if you can delete a task
+    const deleteTX = await contract.deleteTask(0);
+    expect((await contract.readTask(0))[1]).to.equal('');
+
+    // check if event "TaskDeleted" works
+    truffleAssert.eventEmitted(deleteTX, 'TaskDeleted', (ev) => {
+      return ev.taskNumber.toNumber() === 0;
+    });
+  });
 });

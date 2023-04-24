@@ -14,13 +14,13 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@truffle/hdwallet-provider": "^2.1.9",
-    "dotenv": "^16.0.3",
+    "@truffle/hdwallet-provider": "2.1.9",
+    "dotenv": "16.0.3",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-bignumber": "3.0.0",
     "solhint": "3.3.7",
-    "solidity-coverage": "^0.8.2",
+    "solidity-coverage": "0.8.2",
     "truffle-assertions": "0.9.1"
   }
 }

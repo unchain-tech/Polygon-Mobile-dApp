@@ -48,9 +48,9 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-      - name: touch secret
-        run: cd packages/contract && touch .secret
+      - name: Run truffle node
+        run: cd packages/contract && touch .secret && truffle develop &
       - name: Test
         run: yarn workspace contract test
-      # - name: Kill node
-      #   run: kill $(lsof -t -i:9545)
+      - name: Kill node
+        run: kill $(lsof -t -i:9545)

@@ -12,13 +12,10 @@ module.exports = {
     },
     matic: {
       provider: () =>
-        new HDWalletProvider({
-          mnemonic: {
-            phrase: mnemonic,
-          },
-          providerOrUrl: process.env.POLYGON_URL,
-          chainId: 80001,
-        }),
+        new HDWalletProvider(
+          process.env.PRIVATE_KEY,
+          process.env.ALCHEMY_API_URL,
+        ),
       network_id: 80001,
       confirmations: 2,
       timeoutBlocks: 200,

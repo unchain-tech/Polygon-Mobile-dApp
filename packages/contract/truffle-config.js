@@ -12,15 +12,30 @@ module.exports = {
     },
     matic: {
       provider: () =>
-        new HDWalletProvider(
-          process.env.PRIVATE_KEY,
-          process.env.ALCHEMY_API_URL,
-        ),
+        new HDWalletProvider({
+          mnemonic: {
+            phrase: mnemonic,
+          },
+          providerOrUrl: process.env.POLYGON_URL,
+          chainId: 80001,
+        }),
       network_id: 80001,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true,
       chainId: 80001,
+    },
+    sepolia: {
+      provider: () =>
+        new HDWalletProvider(
+          process.env.PRIVATE_KEY,
+          process.env.INFURA_API_URL,
+        ),
+      network_id: 11155111,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      chainId: 11155111,
     },
   },
   contracts_directory: './contracts',

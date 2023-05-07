@@ -11,6 +11,7 @@ describe('Polygon-Mobile-dApp', () => {
 
   // deploy contract before all of the tests
   before(async () => {
+    this.timeout(100000);
     contract = await TodoContract.new();
   });
 

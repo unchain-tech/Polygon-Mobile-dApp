@@ -9,13 +9,9 @@ describe('Polygon-Mobile-dApp', () => {
   // declare contract variable
   let contract;
 
-  // deploy contract before all of the tests
-  before(async () => {
-    contract = await TodoContract.new();
-  });
-
   // check creating function
   it('create function is working on chain', async () => {
+    contract = await TodoContract.new();
     // check if you can create multiple tasks
     const creationTX = await contract.createTask('make lunch');
     await contract.createTask('do the dises');
@@ -30,7 +26,7 @@ describe('Polygon-Mobile-dApp', () => {
     truffleAssert.eventEmitted(creationTX, 'TaskCreated', (ev) => {
       return ev.taskNumber.toNumber() === 0 && ev.task === 'make lunch';
     });
-  });
+  }).timeout(100000);
 
   // check updating function
   it('update function is working on chain', async () => {
@@ -44,7 +40,7 @@ describe('Polygon-Mobile-dApp', () => {
     truffleAssert.eventEmitted(updateTX, 'TaskUpdated', (ev) => {
       return ev.taskId.toNumber() === 0 && ev.task === 'make dinner';
     });
-  });
+  }).timeout(100000);
 
   // check toggling function
   it('toggleComplete function is working on chain', async () => {
@@ -61,7 +57,7 @@ describe('Polygon-Mobile-dApp', () => {
         ev.isComplete === true
       );
     });
-  });
+  }).timeout(100000);
 
   // check deleting function
   it('delete function is working on chain', async () => {
@@ -73,5 +69,5 @@ describe('Polygon-Mobile-dApp', () => {
     truffleAssert.eventEmitted(deleteTX, 'TaskDeleted', (ev) => {
       return ev.taskNumber.toNumber() === 0;
     });
-  });
+  }).timeout(100000);
 });

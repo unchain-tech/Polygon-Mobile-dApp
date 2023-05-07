@@ -8,7 +8,7 @@
     "migrate": "truffle migrate",
     "migrate:matic": "truffle migrate --network matic",
     "node": "truffle develop",
-    "test": "truffle test ./test/test.js -t 3000000",
+    "test": "truffle test",
     "solhint": "solhint --max-error 0 -c ./.solhint.json \"./contracts/*.sol\"",
     "solhint:fix": "solhint --fix --max-error 0 -c ./.solhint.json \"./contract/**/*.sol\""
   },

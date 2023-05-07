@@ -49,4 +49,8 @@ module.exports = {
   db: {
     enabled: false,
   },
+  mocha: {
+    enableTimeouts: false,
+    before_timeout: 120000,
+  },
 };

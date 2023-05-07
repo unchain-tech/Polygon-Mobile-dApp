@@ -11,13 +11,11 @@ describe('Polygon-Mobile-dApp', () => {
 
   // deploy contract before all of the tests
   before(async () => {
-    this.timeout(100000);
     contract = await TodoContract.new();
   });
 
   // check creating function
   it('create function is working on chain', async () => {
-    this.timeout(100000);
     // check if you can create multiple tasks
     const creationTX = await contract.createTask('make lunch');
     await contract.createTask('do the dises');
@@ -36,7 +34,6 @@ describe('Polygon-Mobile-dApp', () => {
 
   // check updating function
   it('update function is working on chain', async () => {
-    this.timeout(100000);
     // check if you can update tasks
     const updateTX = await contract.updateTask(0, 'make dinner');
     await contract.updateTask(1, 'clean up the rooms');
@@ -51,7 +48,6 @@ describe('Polygon-Mobile-dApp', () => {
 
   // check toggling function
   it('toggleComplete function is working on chain', async () => {
-    this.timeout(100000);
     // check if you can make a task completed
     const formerState = (await contract.readTask(0))[2];
     const toggleTX = await contract.toggleComplete(0);
@@ -69,7 +65,6 @@ describe('Polygon-Mobile-dApp', () => {
 
   // check deleting function
   it('delete function is working on chain', async () => {
-    this.timeout(100000);
     // check if you can delete a task
     const deleteTX = await contract.deleteTask(0);
     expect((await contract.readTask(0))[1]).to.equal('');

@@ -5,8 +5,7 @@ const truffleAssert = require('truffle-assertions');
 require(`chai`).use(require('chai-as-promised')).should();
 const { expect } = require('chai');
 
-// eslint-disable-next-line no-undef
-contract('Polygon-Mobile-dApp', () => {
+describe('Polygon-Mobile-dApp', () => {
   // declare contract variable
   let contract;
 

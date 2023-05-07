@@ -32,6 +32,7 @@ module.exports = {
           process.env.INFURA_API_URL,
         ),
       network_id: 11155111,
+      timeoutBlocks: 200000,
       skipDryRun: true,
       chainId: 11155111,
     },

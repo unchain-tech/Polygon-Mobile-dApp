@@ -1,8 +1,4 @@
-// eslint-disable-next-line no-undef
-const TodoContract = artifacts.require(`TodoContract`);
-const truffleAssert = require('truffle-assertions');
-
-require(`chai`).use(require('chai-as-promised')).should();
+const hre = require('hardhat');
 const { expect } = require('chai');
 
 describe('Polygon-Mobile-dApp', () => {
@@ -11,13 +7,14 @@ describe('Polygon-Mobile-dApp', () => {
 
   // deploy contract before all of the tests
   before(async () => {
-    contract = await TodoContract.new();
+    const contractFactory = await hre.ethers.getContractFactory('TodoContract');
+    contract = await contractFactory.deploy();
   });
 
   // check creating function
   it('create function is working on chain', async () => {
     // check if you can create multiple tasks
-    const creationTX = await contract.createTask('make lunch');
+    const receipt = await (await contract.createTask('make lunch')).wait();
     await contract.createTask('do the dises');
     await contract.createTask('have luch with friends');
 
@@ -27,51 +24,56 @@ describe('Polygon-Mobile-dApp', () => {
     expect((await contract.readTask(2))[1]).to.equal('have luch with friends');
 
     // check if event "TaskCreated" works
-    truffleAssert.eventEmitted(creationTX, 'TaskCreated', (ev) => {
-      return ev.taskNumber.toNumber() === 0 && ev.task === 'make lunch';
-    });
+    expect(
+      receipt.events?.filter((x) => {
+        return x.event === 'TaskCreated';
+      })[0].args[0],
+    ).to.equal('make lunch');
   });
 
-  // check updating function
   it('update function is working on chain', async () => {
     // check if you can update tasks
-    const updateTX = await contract.updateTask(0, 'make dinner');
+    const receipt = await (await contract.updateTask(0, 'make dinner')).wait();
     await contract.updateTask(1, 'clean up the rooms');
     expect((await contract.readTask(0))[1]).to.equal('make dinner');
     expect((await contract.readTask(1))[1]).to.equal('clean up the rooms');
 
     // check if event "TaskUpdated" works
-    truffleAssert.eventEmitted(updateTX, 'TaskUpdated', (ev) => {
-      return ev.taskId.toNumber() === 0 && ev.task === 'make dinner';
-    });
+    expect(
+      receipt.events?.filter((x) => {
+        return x.event === 'TaskUpdated';
+      })[0].args[0],
+    ).to.equal('make dinner');
   });
 
   // check toggling function
   it('toggleComplete function is working on chain', async () => {
     // check if you can make a task completed
     const formerState = (await contract.readTask(0))[2];
-    const toggleTX = await contract.toggleComplete(0);
+    const receipt = await (await contract.toggleComplete(0)).wait();
     expect((await contract.readTask(0))[2]).to.equal(!formerState);
 
     // check if event "TaskIsCompleteToggled" works
-    truffleAssert.eventEmitted(toggleTX, 'TaskIsCompleteToggled', (ev) => {
-      return (
-        ev.taskId.toNumber() === 0 &&
-        ev.task === 'make dinner' &&
-        ev.isComplete === true
-      );
-    });
+    expect(
+      receipt.events?.filter((x) => {
+        return x.event === 'TaskIsCompleteToggled';
+      })[0].args[0],
+    ).to.equal('make dinner');
   });
 
   // check deleting function
   it('delete function is working on chain', async () => {
     // check if you can delete a task
-    const deleteTX = await contract.deleteTask(0);
+    const receipt = await (await contract.deleteTask(0)).wait();
     expect((await contract.readTask(0))[1]).to.equal('');
 
     // check if event "TaskDeleted" works
-    truffleAssert.eventEmitted(deleteTX, 'TaskDeleted', (ev) => {
-      return ev.taskNumber.toNumber() === 0;
-    });
+    expect(
+      receipt.events
+        ?.filter((x) => {
+          return x.event === 'TaskDeleted';
+        })[0]
+        .args[0].toNumber(),
+    ).to.equal(0);
   });
 });

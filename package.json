@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "\"template for monorepo project\"",
   "private": true,
+  "packageManager": "yarn@3.6.4",
   "scripts": {
     "contract": "yarn workspace contract",
     "client": "yarn workspace client",

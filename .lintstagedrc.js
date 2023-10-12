@@ -3,13 +3,13 @@ const path = require('path');
 const buildLintCommand = (filenames) =>
   `eslint ${filenames.map((f) => path.relative(process.cwd(), f)).join(' ')}`;
 
-const buildSolhintCommand = (filenames) =>
-  `solhint --max-error 0 -c packages/old-contract/.solhint.json --ignore-path .gitignore ${filenames
+const buildPrettierCommand = (filenames) =>
+  `prettier --check ${filenames
     .map((f) => path.relative(process.cwd(), f))
     .join(' ')} `;
 
-const buildPrettierCommand = (filenames) =>
-  `prettier --check ${filenames
+const buildSolhintCommand = (filenames) =>
+  `solhint --max-error 0 ${filenames
     .map((f) => path.relative(process.cwd(), f))
     .join(' ')} `;
 

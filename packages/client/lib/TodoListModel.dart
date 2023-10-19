@@ -5,17 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TodoListModel extends ChangeNotifier {
   List<Task> todos = [];
   bool isLoading = true;
   int? taskCount;
-  final String _rpcUrl = "http://127.0.0.1:7545";
-  final String _wsUrl = "ws://127.0.0.1:7545/";
-
-  //自分のPRIVATE_KEYを追加してください。
-  final String _privateKey =
-      "efbd8a3cf281e7d9bab2d66e7f230b4d887b5b3d14b268aa22159ea7a26f8868";
+  final String _rpcUrl = 'https://rpc.ankr.com/polygon_mumbai';
 
   Web3Client? _client;
   String? _abiCode;
@@ -37,9 +33,9 @@ class TodoListModel extends ChangeNotifier {
   }
 
   Future<void> init() async {
-    _client = Web3Client(_rpcUrl, Client(), socketConnector: () {
-      return IOWebSocketChannel.connect(_wsUrl).cast<String>();
-    });
+    var httpClient = Client();
+
+    _client = Web3Client(_rpcUrl, httpClient);
 
     await getAbi();
     await getCredentials();
@@ -52,14 +48,13 @@ class TodoListModel extends ChangeNotifier {
         await rootBundle.loadString("smartcontract/TodoContract.json");
     var jsonAbi = jsonDecode(abiStringFile);
     _abiCode = jsonEncode(jsonAbi["abi"]);
-    _contractAddress =
-        EthereumAddress.fromHex(jsonAbi["networks"]["5777"]["address"]);
+    _contractAddress = EthereumAddress.fromHex(dotenv.env["CONTRACT_ADDRESS"]!);
   }
 
   //秘密鍵を渡して`Credentials`クラスのインスタンスを生成する。
   Future<void> getCredentials() async {
-    _credentials = await _client!.credentialsFromPrivateKey(_privateKey);
-    _ownAddress = await _credentials!.extractAddress();
+    _credentials = EthPrivateKey.fromHex(dotenv.env["PRIVATE_KEY"]!);
+    _ownAddress = _credentials!.address;
   }
 
   //`_abiCode`と`_contractAddress`を使用して、スマートコントラクトのインスタンスを作成する。
@@ -112,6 +107,7 @@ class TodoListModel extends ChangeNotifier {
         function: _createTask!,
         parameters: [taskNameData],
       ),
+      chainId: 80001,
     );
     await getTodos();
   }
@@ -127,6 +123,7 @@ class TodoListModel extends ChangeNotifier {
         function: _updateTask!,
         parameters: [BigInt.from(id), taskNameData],
       ),
+      chainId: 80001,
     );
     await getTodos();
   }
@@ -142,6 +139,7 @@ class TodoListModel extends ChangeNotifier {
         function: _toggleComplete!,
         parameters: [BigInt.from(id)],
       ),
+      chainId: 80001,
     );
     await getTodos();
   }
@@ -157,6 +155,7 @@ class TodoListModel extends ChangeNotifier {
         function: _deleteTask!,
         parameters: [BigInt.from(id)],
       ),
+      chainId: 80001,
     );
     await getTodos();
   }

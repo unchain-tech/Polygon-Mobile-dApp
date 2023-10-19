@@ -18,7 +18,7 @@ yarn
 
 まずは[こちら](https://app.unchain.tech/learn/Polygon-Mobile-dApp/ja/1/3/)を参考に、Alchemy と metamask の準備をしましょう。
 
-次に`packages/contract`に`.env`ファイルを作成して下のように記述しましょう。`YOUR_PRIVATE_KEY`にはmetamaskの秘密鍵を指定して下さい。`YOUR_ALCHEMY_KEY`にはAlchemyのAPIキーを指定してください。
+次に`packages/contract`に`.env`ファイルを作成して下のように記述しましょう。`YOUR_PRIVATE_KEY`には metamask の秘密鍵を指定して下さい。`YOUR_ALCHEMY_KEY`には Alchemy の API キーを指定してください。
 
 `.env`
 
@@ -37,11 +37,11 @@ yarn contract deploy
 
 ## フロントの立ち上げ
 
-[こちら](https://app.unchain.tech/learn/Polygon-Mobile-dApp/ja/1/1/)の Section1-Lesson1 ✨ Flutter の環境構築をする を参考にしながらFlutterの環境構築を行ないましょう。
+[こちら](https://app.unchain.tech/learn/Polygon-Mobile-dApp/ja/1/1/)の Section1-Lesson1 ✨ Flutter の環境構築をする を参考にしながら Flutter の環境構築を行ないましょう。
 
 次に、`packages/client`に`smartcontract`というディレクトリを作成して、その中に先ほどデプロイした際に得た`TodoContract.json`というファイルをコピーして貼り付けましょう。
 
-最後に`packages/client`に`.env`ファイルを作成して下のように記述しましょう。`YOUR_DEPLOYED_CONTRACT_ADDRESS`には、先ほどデプロイした際に得たコントラクトアドレスを指定してください。`PRIVATE_KEY`はpackages/contract/.envと同じものを指定して下さい。
+最後に`packages/client`に`.env`ファイルを作成して下のように記述しましょう。`YOUR_DEPLOYED_CONTRACT_ADDRESS`には、先ほどデプロイした際に得たコントラクトアドレスを指定してください。`PRIVATE_KEY`は packages/contract/.env と同じものを指定して下さい。
 
 `.env`
 

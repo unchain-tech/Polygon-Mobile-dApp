@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TodoListModel extends ChangeNotifier {
@@ -18,7 +17,6 @@ class TodoListModel extends ChangeNotifier {
 
   Credentials? _credentials;
   EthereumAddress? _contractAddress;
-  EthereumAddress? _ownAddress;
   DeployedContract? _contract;
 
   ContractFunction? _taskCount;
@@ -54,7 +52,6 @@ class TodoListModel extends ChangeNotifier {
   //秘密鍵を渡して`Credentials`クラスのインスタンスを生成する。
   Future<void> getCredentials() async {
     _credentials = EthPrivateKey.fromHex(dotenv.env["PRIVATE_KEY"]!);
-    _ownAddress = _credentials!.address;
   }
 
   //`_abiCode`と`_contractAddress`を使用して、スマートコントラクトのインスタンスを作成する。

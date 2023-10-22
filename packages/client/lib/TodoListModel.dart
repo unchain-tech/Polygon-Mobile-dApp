@@ -10,7 +10,6 @@ class TodoListModel extends ChangeNotifier {
   List<Task> todos = [];
   bool isLoading = true;
   int? taskCount;
-  final String _rpcUrl = 'https://rpc.ankr.com/polygon_mumbai';
 
   Web3Client? _client;
   String? _abiCode;
@@ -33,7 +32,7 @@ class TodoListModel extends ChangeNotifier {
   Future<void> init() async {
     var httpClient = Client();
 
-    _client = Web3Client(_rpcUrl, httpClient);
+    _client = Web3Client(dotenv.env["INFURA_KEY_TEST"]!, httpClient);
 
     await getAbi();
     await getCredentials();

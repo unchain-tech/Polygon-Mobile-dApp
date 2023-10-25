@@ -17,11 +17,7 @@ class MyApp extends StatelessWidget {
       create: (context) => TodoListModel(),
       child: MaterialApp(
         title: 'Flutter TODO',
-        // home: TodoList(),
         home: WalletConnect(),
-        routes: {
-          '/todoList': (context) => const TodoList(),
-        },
       ),
     );
   }

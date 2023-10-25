@@ -1,3 +1,4 @@
+import 'package:client/TodoList.dart';
 import 'package:flutter/material.dart';
 
 class WalletConnect extends StatelessWidget {
@@ -14,6 +15,8 @@ class WalletConnect extends StatelessWidget {
           onPressed: () {
             // TODO: Wallet Connectのロジックを追加
             debugPrint('Wallet Connect');
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const TodoList()));
           },
           child: const Text(
             'Wallet Connect',

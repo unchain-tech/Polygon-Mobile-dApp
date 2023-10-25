@@ -32,7 +32,7 @@ class TodoListModel extends ChangeNotifier {
   Future<void> init() async {
     var httpClient = Client();
 
-    _client = Web3Client(dotenv.env["INFURA_KEY_TEST"]!, httpClient);
+    _client = Web3Client(dotenv.env["POLYGON_MUMBAI_INFURA_KEY"]!, httpClient);
 
     await getAbi();
     await getCredentials();

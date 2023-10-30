@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'package:client/TodoList.dart';
+import 'package:client/TodoListModel.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:provider/provider.dart';
 
 class WalletConnect extends StatelessWidget {
   const WalletConnect({Key? key}) : super(key: key);
@@ -27,39 +30,37 @@ class WalletConnect extends StatelessWidget {
     );
   }
 
-  Future<String?> connectWallet() async {
+  Future<void> connectWallet() async {
     if (_walletConnect == null) {
       await _initWalletConnect();
     }
 
-    // セッション（dAppとMetamask間の接続）を開始します。
-    final ConnectResponse connectResponse = await _walletConnect!.connect(
-      requiredNamespaces: {
-        'eip155': const RequiredNamespace(
-            chains: ['eip155:80001'],
-            methods: ['eth_signTransaction'],
-            events: ['chainChanged']),
-      },
-    );
-    final Uri? uri = connectResponse.uri;
-    if (uri == null) {
-      return null;
+    try {
+      // セッション（dAppとMetamask間の接続）を開始します。
+      final ConnectResponse connectResponse = await _walletConnect!.connect(
+        requiredNamespaces: {
+          'eip155': const RequiredNamespace(
+              chains: ['eip155:80001'],
+              methods: ['eth_signTransaction', 'eth_sendTransaction'],
+              events: ['chainChanged']),
+        },
+      );
+      final Uri? uri = connectResponse.uri;
+      if (uri == null) {
+        throw Exception('Invalid URI');
+      }
+      final String encodedUri = Uri.encodeComponent('$uri');
+      _url = encodedUri;
+
+      // Metamaskを起動します。
+      await launchUrlString(deepLinkUrl, mode: LaunchMode.externalApplication);
+
+      // セッションが確立されるまで待機します。
+      final Completer<SessionData> session = connectResponse.session;
+      _sessionData = await session.future;
+    } catch (e) {
+      rethrow;
     }
-
-    final String encodedUri = Uri.encodeComponent('$uri');
-    _url = encodedUri;
-
-    await launchUrlString(deepLinkUrl, mode: LaunchMode.externalApplication);
-
-    // セッションが確立されるまで待機します。
-    _sessionData = await connectResponse.session.future;
-
-    // セッションを認証したアカウントを取得します。
-    final String account = NamespaceUtils.getAccount(
-      _sessionData!.namespaces.values.first.accounts.first,
-    );
-
-    return account;
   }
 
   @override
@@ -70,14 +71,18 @@ class WalletConnect extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () {
-            connectWallet().then((value) {
-              debugPrint('Connected $value');
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const TodoList()));
-            }).catchError((error) {
-              debugPrint('Error $error');
-            });
+          onPressed: () async {
+            try {
+              await connectWallet();
+              await context.read<TodoListModel>().setWalletDetails(
+                  deepLinkUrl, _walletConnect!, _sessionData!);
+            } catch (error) {
+              debugPrint('connectWallet: $error');
+            }
+
+            // TodoListへ遷移します。
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const TodoList()));
           },
           child: const Text(
             'Wallet Connect',

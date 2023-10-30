@@ -3,8 +3,12 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:web3dart/web3dart.dart';
+import 'package:web3dart/crypto.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:client/EthereumTransaction.dart';
 
 class TodoListModel extends ChangeNotifier {
   List<Task> todos = [];
@@ -14,7 +18,10 @@ class TodoListModel extends ChangeNotifier {
   Web3Client? _client;
   String? _abiCode;
 
-  Credentials? _credentials;
+  String? _deepLinkUrl;
+  String? _account;
+  Web3App? _wcClient;
+  SessionData? _sessionData;
   EthereumAddress? _contractAddress;
   DeployedContract? _contract;
 
@@ -35,8 +42,19 @@ class TodoListModel extends ChangeNotifier {
     _client = Web3Client(dotenv.env["POLYGON_MUMBAI_INFURA_KEY"]!, httpClient);
 
     await getAbi();
-    await getCredentials();
     await getDeployedContract();
+  }
+
+  Future<void> setWalletDetails(
+      String deepLinkUrl, Web3App wcClient, SessionData sessionData) async {
+    _deepLinkUrl = deepLinkUrl;
+    _wcClient = wcClient;
+    _sessionData = sessionData;
+    // セッションを認証したアカウントを取得します。
+    _account = NamespaceUtils.getAccount(
+        sessionData.namespaces.values.first.accounts.first);
+
+    notifyListeners();
   }
 
   //スマートコントラクトの`ABI`を取得し、デプロイされたコントラクトのアドレスを取り出す。
@@ -46,11 +64,6 @@ class TodoListModel extends ChangeNotifier {
     var jsonAbi = jsonDecode(abiStringFile);
     _abiCode = jsonEncode(jsonAbi["abi"]);
     _contractAddress = EthereumAddress.fromHex(dotenv.env["CONTRACT_ADDRESS"]!);
-  }
-
-  //秘密鍵を渡して`Credentials`クラスのインスタンスを生成する。
-  Future<void> getCredentials() async {
-    _credentials = EthPrivateKey.fromHex(dotenv.env["PRIVATE_KEY"]!);
   }
 
   //`_abiCode`と`_contractAddress`を使用して、スマートコントラクトのインスタンスを作成する。
@@ -92,68 +105,106 @@ class TodoListModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  EthereumTransaction generateTransaction(
+      ContractFunction function, List<dynamic> parameters) {
+    // web3dartを使用して、トランザクションを作成します。
+    final Transaction transaction = Transaction.callContract(
+        contract: _contract!, function: function, parameters: parameters);
+
+    // walletconnect_flutter_v2を使用して、Ethereumトランザクションを作成します。
+    final EthereumTransaction ethereumTransaction = EthereumTransaction(
+      from: _account!,
+      to: dotenv.env["CONTRACT_ADDRESS"]!,
+      value: '0x${transaction.value?.getInWei.toRadixString(16) ?? '0'}',
+      data: transaction.data != null ? bytesToHex(transaction.data!) : null,
+    );
+
+    return ethereumTransaction;
+  }
+
+  Future<String> sendTransaction(EthereumTransaction transaction) async {
+    // Metamaskアプリケーションを起動します。
+    await launchUrlString(_deepLinkUrl!, mode: LaunchMode.externalApplication);
+
+    // 署名をリクエストします。
+    final String signResponse = await _wcClient?.request(
+      topic: _sessionData?.topic ?? "",
+      chainId: 'eip155:80001',
+      request: SessionRequestParams(
+        method: 'eth_sendTransaction',
+        params: [transaction.toJson()],
+      ),
+    );
+
+    return signResponse;
+  }
+
   //1.to-doを作成する機能
   addTask(String taskNameData) async {
     isLoading = true;
     notifyListeners();
-    await _client!.sendTransaction(
-      _credentials!,
-      Transaction.callContract(
-        contract: _contract!,
-        function: _createTask!,
-        parameters: [taskNameData],
-      ),
-      chainId: 80001,
-    );
-    await getTodos();
+    try {
+      final EthereumTransaction ethereumTransaction =
+          await generateTransaction(_createTask!, [taskNameData]);
+
+      final String signResponse = await sendTransaction(ethereumTransaction);
+      debugPrint("=== signResponse: $signResponse");
+
+      await getTodos();
+    } catch (error) {
+      debugPrint('=== toggleComplete: $error');
+    }
   }
 
   //2.to-doを更新する機能
   updateTask(int id, String taskNameData) async {
     isLoading = true;
     notifyListeners();
-    await _client!.sendTransaction(
-      _credentials!,
-      Transaction.callContract(
-        contract: _contract!,
-        function: _updateTask!,
-        parameters: [BigInt.from(id), taskNameData],
-      ),
-      chainId: 80001,
-    );
-    await getTodos();
+    try {
+      final EthereumTransaction ethereumTransaction = await generateTransaction(
+          _updateTask!, [BigInt.from(id), taskNameData]);
+
+      final String signResponse = await sendTransaction(ethereumTransaction);
+      debugPrint("=== signResponse: $signResponse");
+
+      await getTodos();
+    } catch (error) {
+      debugPrint('=== toggleComplete: $error');
+    }
   }
 
   //3.to-doの完了・未完了を切り替える機能
   toggleComplete(int id) async {
     isLoading = true;
     notifyListeners();
-    await _client!.sendTransaction(
-      _credentials!,
-      Transaction.callContract(
-        contract: _contract!,
-        function: _toggleComplete!,
-        parameters: [BigInt.from(id)],
-      ),
-      chainId: 80001,
-    );
-    await getTodos();
+    try {
+      final EthereumTransaction ethereumTransaction =
+          await generateTransaction(_toggleComplete!, [BigInt.from(id)]);
+
+      final String signResponse = await sendTransaction(ethereumTransaction);
+      debugPrint("=== signResponse: $signResponse");
+
+      await getTodos();
+    } catch (error) {
+      debugPrint('=== toggleComplete: $error');
+    }
   }
 
   //4.to-doを削除する機能
   deleteTask(int id) async {
     isLoading = true;
     notifyListeners();
-    await _client!.sendTransaction(
-      _credentials!,
-      Transaction.callContract(
-        contract: _contract!,
-        function: _deleteTask!,
-        parameters: [BigInt.from(id)],
-      ),
-      chainId: 80001,
-    );
-    await getTodos();
+    try {
+      final EthereumTransaction ethereumTransaction =
+          await generateTransaction(_deleteTask!, [BigInt.from(id)]);
+
+      final String signResponse = await sendTransaction(ethereumTransaction);
+      debugPrint('=== signResponse: $signResponse');
+
+      await getTodos();
+    } catch (error) {
+      debugPrint('=== deleteTask: $error');
+    }
   }
 }
 

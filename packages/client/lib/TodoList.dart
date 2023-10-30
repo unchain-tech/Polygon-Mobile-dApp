@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:client/TodoBottomSheet.dart';
-import 'package:client/TodoListModel.dart';
+
+import 'TodoBottomSheet.dart';
+import 'TodoListModel.dart';
 
 class TodoList extends StatelessWidget {
   const TodoList({Key? key}) : super(key: key);
@@ -50,8 +51,8 @@ class TodoList extends StatelessWidget {
                               //チェックボックス
                               Checkbox(
                                 value: listModel.todos[index].isCompleted,
-                                onChanged: (val) {
-                                  listModel.toggleComplete(
+                                onChanged: (val) async {
+                                  await listModel.toggleComplete(
                                       listModel.todos[index].id!);
                                 },
                               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:client/TodoListModel.dart';
+
+import 'TodoListModel.dart';
 
 showTodoBottomSheet(BuildContext context, {Task? task}) {
   TextEditingController _titleController =
@@ -50,18 +51,21 @@ showTodoBottomSheet(BuildContext context, {Task? task}) {
               ),
               const SizedBox(height: 12),
               if (task == null)
-                buildButton("Created", () {
-                  listModel.addTask(_titleController.text);
+                buildButton("Created", () async {
+                  await listModel.addTask(_titleController.text);
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                 }),
               if (task != null)
-                buildButton("Updated", () {
-                  listModel.updateTask(task.id!, _titleController.text);
+                buildButton("Updated", () async {
+                  await listModel.updateTask(task.id!, _titleController.text);
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                 }),
               if (task != null)
-                buildButton("Delete", () {
-                  listModel.deleteTask(task.id!);
+                buildButton("Delete", () async {
+                  await listModel.deleteTask(task.id!);
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                 }),
             ],

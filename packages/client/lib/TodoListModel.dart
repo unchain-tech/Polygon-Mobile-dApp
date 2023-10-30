@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
-import 'package:web3dart/web3dart.dart';
-import 'package:web3dart/crypto.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:client/EthereumTransaction.dart';
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 class TodoListModel extends ChangeNotifier {
   List<Task> todos = [];
-  bool isLoading = true;
+  bool isLoading = false;
   int? taskCount;
 
   Web3Client? _client;
@@ -68,6 +68,7 @@ class TodoListModel extends ChangeNotifier {
 
   //`_abiCode`と`_contractAddress`を使用して、スマートコントラクトのインスタンスを作成する。
   Future<void> getDeployedContract() async {
+    isLoading = true;
     _contract = DeployedContract(
         ContractAbi.fromJson(_abiCode!, "TodoList"), _contractAddress!);
     _taskCount = _contract!.function("taskCount");
@@ -76,18 +77,21 @@ class TodoListModel extends ChangeNotifier {
     _deleteTask = _contract!.function("deleteTask");
     _toggleComplete = _contract!.function("toggleComplete");
     _todos = _contract!.function("todos");
+
     await getTodos();
+
+    isLoading = false;
   }
 
   //すべてのto-do項目を取得してリストに追加する。
-  getTodos() async {
+  Future<void> getTodos() async {
     List totalTaskList = await _client!
         .call(contract: _contract!, function: _taskCount!, params: []);
 
     BigInt totalTask = totalTaskList[0];
-    taskCount = totalTask.toInt();
+    int taskCount = totalTask.toInt();
     todos.clear();
-    for (var i = 0; i < totalTask.toInt(); i++) {
+    for (var i = 0; i < taskCount; i++) {
       var temp = await _client!.call(
           contract: _contract!, function: _todos!, params: [BigInt.from(i)]);
       if (temp[1] != "")
@@ -99,7 +103,6 @@ class TodoListModel extends ChangeNotifier {
           ),
         );
     }
-    isLoading = false;
     todos = todos.reversed.toList();
 
     notifyListeners();
@@ -140,7 +143,7 @@ class TodoListModel extends ChangeNotifier {
   }
 
   //1.to-doを作成する機能
-  addTask(String taskNameData) async {
+  Future<void> addTask(String taskNameData) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -153,11 +156,13 @@ class TodoListModel extends ChangeNotifier {
       await getTodos();
     } catch (error) {
       debugPrint('=== toggleComplete: $error');
+    } finally {
+      isLoading = false;
     }
   }
 
   //2.to-doを更新する機能
-  updateTask(int id, String taskNameData) async {
+  Future<void> updateTask(int id, String taskNameData) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -170,11 +175,13 @@ class TodoListModel extends ChangeNotifier {
       await getTodos();
     } catch (error) {
       debugPrint('=== toggleComplete: $error');
+    } finally {
+      isLoading = false;
     }
   }
 
   //3.to-doの完了・未完了を切り替える機能
-  toggleComplete(int id) async {
+  Future<void> toggleComplete(int id) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -187,11 +194,13 @@ class TodoListModel extends ChangeNotifier {
       await getTodos();
     } catch (error) {
       debugPrint('=== toggleComplete: $error');
+    } finally {
+      isLoading = false;
     }
   }
 
   //4.to-doを削除する機能
-  deleteTask(int id) async {
+  Future<void> deleteTask(int id) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -204,6 +213,8 @@ class TodoListModel extends ChangeNotifier {
       await getTodos();
     } catch (error) {
       debugPrint('=== deleteTask: $error');
+    } finally {
+      isLoading = false;
     }
   }
 }
@@ -214,4 +225,26 @@ class Task {
   final String? taskName;
   final bool? isCompleted;
   Task({this.id, this.taskName, this.isCompleted});
+}
+
+// Ethereumトランザクションを作成するためのモデルクラス
+class EthereumTransaction {
+  const EthereumTransaction({
+    required this.from,
+    required this.to,
+    required this.value,
+    this.data,
+  });
+
+  final String from;
+  final String to;
+  final String value;
+  final String? data;
+
+  Map<String, dynamic> toJson() => {
+        'from': from,
+        'to': to,
+        'value': value,
+        'data': data,
+      };
 }

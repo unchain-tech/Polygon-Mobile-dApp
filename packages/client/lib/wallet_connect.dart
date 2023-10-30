@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
-import 'TodoList.dart';
-import 'TodoListModel.dart';
+import 'todo_list.dart';
+import 'todo_list_model.dart';
 
 class WalletConnect extends StatelessWidget {
   const WalletConnect({Key? key}) : super(key: key);

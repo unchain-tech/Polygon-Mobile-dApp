@@ -5,7 +5,7 @@ const { PRIVATE_KEY, STAGING_ALCHEMY_KEY } = process.env;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: '0.8.17',
+  solidity: '0.8.19',
   networks: {
     mumbai: {
       url: STAGING_ALCHEMY_KEY || '',

@@ -1,10 +1,10 @@
-## 💬 Polygon-Mobile-dApp(prototype)
+# Polygon Mobile dApp
 
-本レポジトリは Polygon-Mobile-dApp の完成版を示したものになります。
+このリポジトリは UNCHAIN Polygon Mobile dApp の見本コードです。
 
-以下の手順を実行することで Polygon-Mobile-dApp の挙動を確認できます。
+## 実行方法
 
-### レポジトリのクローン
+#### 1. レポジトリのクローン
 
 [こちら](https://github.com/unchain-tech/Polygon-Mobile-dApp.git)から Polygon-Mobile-dApp をクローンします。
 
@@ -14,39 +14,46 @@
 yarn
 ```
 
-## コントラクトのテスト、デプロイ
+#### 2. コントラクトのデプロイ
 
-まずは[こちら](https://app.unchain.tech/learn/Polygon-Mobile-dApp/ja/3/1/)を参考に、Alchemy と metamask の準備をしましょう。
+まずは[こちら](https://app.unchain.tech/learn/Polygon-Mobile-dApp/ja/1/3/)を参考に、Alchemy と metamask の準備をしましょう。
 
-次に packages/contract に自分のウォレットアドレスの recovery phrase と Alchemy の HTTP Key(polygon)を指定します。`.secret`,`.env`
-ファイルを作成しましょう。前者には metamask の recovery phrase を、後者には alchemy の HTTP key を入力します。
-`.secret`
-
-```
-Metamask_Recovery_Phrase
-```
+次に`packages/contract`に`.env`ファイルを作成して下のように記述しましょう。`YOUR_PRIVATE_KEY`には metamask の秘密鍵を指定して下さい。`YOUR_ALCHEMY_KEY`には Alchemy の API キーを指定してください。
 
 `.env`
 
 ```
-POLYGON_URL=Alchemy_HTTP_Key
+PRIVATE_KEY=YOUR_PRIVATE_KEY
+STAGING_ALCHEMY_KEY=YOUR_ALCHEMY_KEY
 ```
 
-では最後にコントラクトのデプロイを下のコマンドを実行することで行なっていきましょう。
+では最後にコントラクトのデプロイを行いましょう。下のコマンドを実行してください。
 
 ```
-yarn contract migrate:matic
+yarn contract deploy
 ```
 
 これでコントラクトの準備は終了です。
 
-## フロントの立ち上げ
+#### 3. フロントの立ち上げ
 
-まずは`packages/client`に`smartcontract`というディレクトリを作成して、その中に先ほど migrate した際に得た`TodoContract.json`というファイルをコピーして貼り付けましょう。
+[こちら](https://app.unchain.tech/learn/Polygon-Mobile-dApp/ja/1/1/)の Section1-Lesson1 ✨ Flutter の環境構築をする を参考にしながら Flutter の環境構築を行ないましょう。
 
-次に[こちら](https://app.unchain.tech/learn/Polygon-Mobile-dApp/ja/3/2/)の section ３-lesson ２ を参考にしながら環境変数などを設定していきましょう。
+次に、`packages/client`に`smartcontract`というディレクトリを作成して、その中に先ほどデプロイした際に得た`TodoContract.json`というファイルをコピーして貼り付けましょう。
 
-全ての準備が整ったら、エミュレータや実機を接続していることを確認して下のコマンドを実行してフロントを立ち上げましょう。
+最後に、`packages/client`に`.env`ファイルを作成して下のように記述しましょう。
+
+`.env`
+
+```
+CONTRACT_ADDRESS=YOUR_DEPLOYED_CONTRACT_ADDRESS
+POLYGON_MUMBAI_INFURA_KEY=YOUR_INFURA_KEY
+```
+
+- `YOUR_DEPLOYED_CONTRACT_ADDRESS`には、先ほどデプロイした際に得たコントラクトアドレスを指定してください。
+- `YOUR_INFURA_KEY`には、[こちら](https://app.unchain.tech/learn/Polygon-Mobile-dApp/ja/2/1/)を参考にして取得した Infura の API キーを指定してください。
+
+全ての準備が整ったら、エミュレータや実機を接続していることを確認してください。下のコマンドを実行してフロントを立ち上げましょう。
 
 ```
 yarn client start

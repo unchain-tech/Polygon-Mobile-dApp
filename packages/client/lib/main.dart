@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:client/TodoList.dart';
-import 'package:client/TodoListModel.dart';
 
-void main() {
+import 'todo_list_model.dart';
+import 'wallet_connect.dart';
+
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
 
@@ -12,9 +15,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => TodoListModel(),
-      child: const MaterialApp(
+      child: MaterialApp(
         title: 'Flutter TODO',
-        home: TodoList(),
+        home: WalletConnect(),
       ),
     );
   }

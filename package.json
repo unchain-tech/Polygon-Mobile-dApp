@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "description": "\"template for monorepo project\"",
   "private": true,
+  "packageManager": "yarn@3.6.4",
   "scripts": {
     "contract": "yarn workspace contract",
     "client": "yarn workspace client",
     "client:dev": "yarn workspace client dev",
-    "prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --ignore-path .prettierignore --write .",
-    "prettier:check": "prettier --ignore-unknown --no-error-on-unmatched-pattern --ignore-path .prettierignore --check .",
+    "solhint": "solhint --max-warnings 0 \"packages/contract/contracts/*.sol\"",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
+    "prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --ignore-path .prettierignore --write .",
+    "prettier:check": "prettier --ignore-unknown --no-error-on-unmatched-pattern --ignore-path .prettierignore --check .",
     "test": "yarn workspace contract test"
   },
   "devDependencies": {
@@ -27,8 +29,9 @@
     "eslint-plugin-promise": "^6.1.1",
     "lint-staged": "^13.1.0",
     "prettier": "^2.8.3",
-    "prettier-plugin-solidity": "^1.1.2",
+    "prettier-plugin-solidity": "^1.1.3",
     "simple-git-hooks": "^2.8.1",
+    "solhint": "^3.6.2",
     "typescript": "^5.0.2"
   },
   "workspaces": {

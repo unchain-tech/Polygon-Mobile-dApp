@@ -1,7 +1,7 @@
 const hre = require('hardhat');
 const { expect } = require('chai');
 
-describe('Polygon-Mobile-dApp', () => {
+describe('TodoContract', () => {
   // declare contract variable
   let contract;
 

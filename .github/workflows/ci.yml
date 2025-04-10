@@ -14,7 +14,9 @@ jobs:
       - uses: actions/cache@v4
         id: yarn-cache
         with:
-          path: '**/node_modules'
+          path: |
+            ${{ github.workspace }}/node_modules
+            ${{ github.workspace }}/.yarn/cache
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install packages
         if: steps.yarn-cache.outputs.cache-hit != 'true'
@@ -27,7 +29,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
         with:
-          path: '**/node_modules'
+          path: |
+            ${{ github.workspace }}/node_modules
+            ${{ github.workspace }}/.yarn/cache
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: solhint
         run: yarn solhint
@@ -44,7 +48,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
         with:
-          path: '**/node_modules'
+          path: |
+            ${{ github.workspace }}/node_modules
+            ${{ github.workspace }}/.yarn/cache
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Contract test
         run: yarn test
